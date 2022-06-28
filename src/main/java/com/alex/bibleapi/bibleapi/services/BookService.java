@@ -1,6 +1,7 @@
 package com.alex.bibleapi.bibleapi.services;
 
 import com.alex.bibleapi.bibleapi.domain.Book;
+import com.alex.bibleapi.bibleapi.exceptions.NotFoundException;
 import com.alex.bibleapi.bibleapi.repositories.BookRepository;
 import com.alex.bibleapi.bibleapi.requests.book.BookPostRequestBody;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,9 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public Book findByAbbrev(String abbrev) {
-        return bookRepository.findByAbbrev(abbrev).orElseThrow(() -> new RuntimeException("Not Found Book"));
+    public Book findByAbbrevOrThrowNotFoundException(String abbrev) {
+        return bookRepository.findByAbbrev(abbrev)
+                .orElseThrow(() -> new NotFoundException("The Book with `abbrev` = `%s` Not Found.".formatted(abbrev)));
     }
 
     public List<Book> findAll() {

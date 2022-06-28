@@ -22,7 +22,7 @@ public class VerseService {
     }
 
     public void save(String abbrev, VersePostRequestBody form) {
-        Book book = bookService.findByAbbrev(abbrev);
+        Book book = bookService.findByAbbrevOrThrowNotFoundException(abbrev);
         Verse newVerse = form.newVerse(form, book);
 
         Optional<Verse> possibleVerse = findByVersionAbbrevChapterNumber(
@@ -36,19 +36,18 @@ public class VerseService {
 
     public Optional<Verse> findByVersionAbbrevChapterNumber(String version, String abbrev, Integer chapter, Integer
             number) {
-        Book book = bookService.findByAbbrev(abbrev);
+        Book book = bookService.findByAbbrevOrThrowNotFoundException(abbrev);
         return verseRepository.findByVersionAndChapterAndNumberAndBook_id(version, chapter, number, book.getId());
     }
 
     public List<Verse> findByVersionAbbrevChapter(String version, String abbrev, Integer chapter) {
-        Book book = bookService.findByAbbrev(abbrev);
+        Book book = bookService.findByAbbrevOrThrowNotFoundException(abbrev);
         return verseRepository.findByVersionAndChapterAndBook_id(version, chapter, book.getId());
     }
 
-    public List<Verse> saveVersesByChapter(String abbrev, ArrayVersePostRequestBody form) {
-        Book book = bookService.findByAbbrev(abbrev);
+    public void saveVersesByChapter(String abbrev, ArrayVersePostRequestBody form) {
+        Book book = bookService.findByAbbrevOrThrowNotFoundException(abbrev);
         List<Verse> verses = form.newVerses(form, book);
         verseRepository.saveAll(verses);
-        return verseRepository.findAll();
     }
 }
