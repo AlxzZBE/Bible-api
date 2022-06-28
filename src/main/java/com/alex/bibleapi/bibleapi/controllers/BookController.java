@@ -22,7 +22,7 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody @Valid BookPostRequestBody form) {
+    public ResponseEntity<Void> saveOneBook(@RequestBody @Valid BookPostRequestBody form) {
         bookService.save(form);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().queryParam("abbrev", form.getAbbrev())
                 .buildAndExpand().toUri();

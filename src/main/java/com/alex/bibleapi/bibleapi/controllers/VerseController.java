@@ -27,7 +27,7 @@ public class VerseController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestParam String abbrev, @RequestBody @Valid VersePostRequestBody form) {
+    public ResponseEntity<Void> saveOneVerse(@RequestParam String abbrev, @RequestBody @Valid VersePostRequestBody form) {
         verseService.save(abbrev, form);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("verses/{version}/{abbrev}/{chapter}/{number}")
                 .buildAndExpand(form.getVersion(), abbrev, form.getChapter(), form.getNumber()).toUri();

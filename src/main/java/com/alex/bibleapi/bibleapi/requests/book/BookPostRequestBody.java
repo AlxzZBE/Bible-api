@@ -14,7 +14,7 @@ public class BookPostRequestBody {
     private String name;
 
     @NotBlank(message = "The Field `abbrev` cannot be Empty or Null")
-    @Length(min = 2, max = 2, message = "The field `abbrev` only should be 2 characters")
+    @Length(min = 2, max = 4, message = "The field `abbrev` should be 2 min characters and 4 max characters")
     private String abbrev;
 
     @NotBlank(message = "The Field `language` cannot be Empty or Null")
@@ -94,18 +94,5 @@ public class BookPostRequestBody {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    @Override
-    public String toString() {
-        return "BookPostRequestBody{" +
-                "author='" + author + '\'' +
-                ", name='" + name + '\'' +
-                ", abbrev='" + abbrev + '\'' +
-                ", language='" + language + '\'' +
-                ", chapters=" + chapters +
-                ", testament=" + testament +
-                ", description='" + description + '\'' +
-                '}';
     }
 }

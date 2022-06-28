@@ -1,5 +1,7 @@
 package com.alex.bibleapi.bibleapi.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -19,6 +21,7 @@ public class Book {
     private String name;
 
     @NotBlank(message = "The Field `abbrev` cannot be Empty or Null")
+    @Length(min = 2, max = 4, message = "The field `abbrev` should be 2 min characters and 4 max characters")
     @Column(unique = true, nullable = false)
     private String abbrev;
 

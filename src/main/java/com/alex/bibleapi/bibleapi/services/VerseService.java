@@ -2,9 +2,10 @@ package com.alex.bibleapi.bibleapi.services;
 
 import com.alex.bibleapi.bibleapi.domain.Book;
 import com.alex.bibleapi.bibleapi.domain.Verse;
+import com.alex.bibleapi.bibleapi.exceptions.AlreadyExistsException;
 import com.alex.bibleapi.bibleapi.repositories.VerseRepository;
-import com.alex.bibleapi.bibleapi.temp.ArrayVersePostRequestBody;
 import com.alex.bibleapi.bibleapi.requests.verse.VersePostRequestBody;
+import com.alex.bibleapi.bibleapi.temp.ArrayVersePostRequestBody;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,15 +24,17 @@ public class VerseService {
 
     public void save(String abbrev, VersePostRequestBody form) {
         Book book = bookService.findByAbbrevOrThrowNotFoundException(abbrev);
-        Verse newVerse = form.newVerse(form, book);
 
-        Optional<Verse> possibleVerse = findByVersionAbbrevChapterNumber(
-                form.getVersion(), abbrev, form.getChapter(), form.getNumber());
+        Optional<Verse> possibleVerse = verseRepository.findByVersionAndChapterAndNumberAndBook_id(
+                form.getVersion(), form.getChapter(), form.getNumber(), book.getId());
 
-        if (possibleVerse.isEmpty())
+        if (possibleVerse.isEmpty()) {
+            Verse newVerse = form.newVerse(form, book);
             verseRepository.save(newVerse);
-        else
-            throw new RuntimeException("Already exists a verse in this book");
+        } else
+            throw new AlreadyExistsException(
+                    "Already Exists a verse in the Book: `%s` Chapter: `%d` Number: `%d` Version: `%s`"
+                            .formatted(book.getName(), form.getChapter(), form.getNumber(), form.getVersion()));
     }
 
     public Optional<Verse> findByVersionAbbrevChapterNumber(String version, String abbrev, Integer chapter, Integer
