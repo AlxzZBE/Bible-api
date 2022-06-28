@@ -1,12 +1,12 @@
 package com.alex.bibleapi.bibleapi.controllers;
 
 import com.alex.bibleapi.bibleapi.domain.Verse;
-import com.alex.bibleapi.bibleapi.temp.ArrayVersePostRequestBody;
 import com.alex.bibleapi.bibleapi.requests.verse.ListVerseGet;
 import com.alex.bibleapi.bibleapi.requests.verse.VerseGet;
 import com.alex.bibleapi.bibleapi.requests.verse.VersePostRequestBody;
 import com.alex.bibleapi.bibleapi.services.BookService;
 import com.alex.bibleapi.bibleapi.services.VerseService;
+import com.alex.bibleapi.bibleapi.temp.ArrayVersePostRequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -26,7 +26,7 @@ public class VerseController {
         this.verseService = verseService;
     }
 
-    @PostMapping
+    @PostMapping(params = "abbrev")
     public ResponseEntity<Void> saveOneVerse(@RequestParam String abbrev, @RequestBody @Valid VersePostRequestBody form) {
         verseService.save(abbrev, form);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("verses/{version}/{abbrev}/{chapter}/{number}")

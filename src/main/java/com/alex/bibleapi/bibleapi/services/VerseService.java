@@ -33,8 +33,23 @@ public class VerseService {
             verseRepository.save(newVerse);
         } else
             throw new AlreadyExistsException(
-                    "Already Exists a verse in the Book: `%s` Chapter: `%d` Number: `%d` Version: `%s`"
+                    "Already Exists a Verse in the Book: `%s` Chapter: `%d` Number: `%d` Version: `%s`"
                             .formatted(book.getName(), form.getChapter(), form.getNumber(), form.getVersion()));
+    }
+
+    public void saveVersesByChapter(String abbrev, ArrayVersePostRequestBody form) {
+        Book book = bookService.findByAbbrevOrThrowNotFoundException(abbrev);
+
+        List<Verse> possibleVerses = verseRepository
+                .findByVersionAndBook_idAndChapter(form.getVersion(), book.getId(), form.getChapter());
+
+        if (possibleVerses.isEmpty()) {
+            List<Verse> verses = form.newVerses(form, book);
+            verseRepository.saveAll(verses);
+        } else
+            throw new AlreadyExistsException(
+                    "Already Exists some Verses in the Book: `%s` Chapter: `%d` Version: `%s`"
+                            .formatted(book.getName(), form.getChapter(), form.getVersion()));
     }
 
     public Optional<Verse> findByVersionAbbrevChapterNumber(String version, String abbrev, Integer chapter, Integer
@@ -45,12 +60,8 @@ public class VerseService {
 
     public List<Verse> findByVersionAbbrevChapter(String version, String abbrev, Integer chapter) {
         Book book = bookService.findByAbbrevOrThrowNotFoundException(abbrev);
-        return verseRepository.findByVersionAndChapterAndBook_id(version, chapter, book.getId());
+        return verseRepository.findByVersionAndBook_idAndChapter(version, book.getId(), chapter);
     }
 
-    public void saveVersesByChapter(String abbrev, ArrayVersePostRequestBody form) {
-        Book book = bookService.findByAbbrevOrThrowNotFoundException(abbrev);
-        List<Verse> verses = form.newVerses(form, book);
-        verseRepository.saveAll(verses);
-    }
+
 }

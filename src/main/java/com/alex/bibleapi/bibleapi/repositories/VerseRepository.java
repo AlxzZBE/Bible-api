@@ -13,5 +13,5 @@ public interface VerseRepository extends JpaRepository<Verse, Integer> {
     Optional<Verse> findByVersionAndChapterAndNumberAndBook_id(String version, Integer chapter, Integer number,
                                                                Integer bookId);
 
-    List<Verse> findByVersionAndChapterAndBook_id(String version, Integer chapter, Integer bookId);
+    List<Verse> findByVersionAndBook_idAndChapter(String version, Integer bookId, Integer chapter);
 }
