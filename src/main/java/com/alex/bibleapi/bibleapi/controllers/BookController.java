@@ -3,9 +3,12 @@ package com.alex.bibleapi.bibleapi.controllers;
 import com.alex.bibleapi.bibleapi.requests.book.BookGet;
 import com.alex.bibleapi.bibleapi.requests.book.BookPostRequestBody;
 import com.alex.bibleapi.bibleapi.services.BookService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -19,8 +22,11 @@ public class BookController {
     }
 
     @PostMapping
-    public void save(@RequestBody @Valid BookPostRequestBody form) {
+    public ResponseEntity<Void> save(@RequestBody @Valid BookPostRequestBody form) {
         bookService.save(form);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().queryParam("abbrev", form.getAbbrev())
+                .buildAndExpand().toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @GetMapping

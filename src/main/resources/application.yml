@@ -7,7 +7,7 @@ spring:
         globally_quoted_identifiers: true
 
   profiles:
-    active: dev
+    active: local
 
 server:
   error:
