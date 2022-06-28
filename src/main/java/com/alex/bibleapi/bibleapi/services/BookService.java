@@ -34,7 +34,7 @@ public class BookService {
                 .orElseThrow(() -> new NotFoundException("The Book with `abbrev` = `%s` Not Found.".formatted(abbrev)));
     }
 
-    public List<Book> findAll() {
-        return bookRepository.findAll();
+    public List<Book> findAllByLanguage(String language) {
+        return bookRepository.findByLanguage(language);
     }
 }

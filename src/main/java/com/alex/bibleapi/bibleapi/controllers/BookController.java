@@ -30,15 +30,14 @@ public class BookController {
         return ResponseEntity.created(uri).build();
     }
 
-    @GetMapping
+    @GetMapping(params = "abbrev")
     public ResponseEntity<BookGet> findByAbbrev(@RequestParam String abbrev) {
         Book savedBook = bookService.findByAbbrevOrThrowNotFoundException(abbrev);
         return ResponseEntity.ok(new BookGet(savedBook));
     }
 
-//    @GetMapping
-//    public List<BookGet> findAllBooks() {
-//        return bookService.findAll().stream().map(BookGet::new)
-//                .toList();
-//    }
+    @GetMapping(params = "language")
+    public List<BookGet> findAllByLanguage(@RequestParam String language) {
+        return bookService.findAllByLanguage(language).stream().map(BookGet::new).toList();
+    }
 }
