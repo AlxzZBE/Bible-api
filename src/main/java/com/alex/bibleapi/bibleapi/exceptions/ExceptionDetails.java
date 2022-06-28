@@ -1,6 +1,6 @@
 package com.alex.bibleapi.bibleapi.exceptions;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.time.LocalDateTime;
 
@@ -11,11 +11,13 @@ public class ExceptionDetails {
     private Integer status;
     private String details;
 
-    public ExceptionDetails(NotFoundException nfe) {
-        this.timeStamp = LocalDateTime.now();
-        this.title = "Not Found Exception, Check the details and the Documentation";
-        this.status = HttpStatus.NOT_FOUND.value();
-        this.details = nfe.getMessage();
+    public ExceptionDetails newExceptionDetails(RuntimeException e, String title) {
+        ExceptionDetails exceptionDetails = new ExceptionDetails();
+        exceptionDetails.setTimeStamp(timeStamp = LocalDateTime.now());
+        exceptionDetails.setTitle(title);
+        exceptionDetails.setStatus(e.getClass().getAnnotation(ResponseStatus.class).value().value());
+        exceptionDetails.setDetails(e.getMessage());
+        return exceptionDetails;
     }
 
     public LocalDateTime getTimeStamp() {

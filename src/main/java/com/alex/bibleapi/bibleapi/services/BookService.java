@@ -37,6 +37,4 @@ public class BookService {
     public List<Book> findAll() {
         return bookRepository.findAll();
     }
-
-
 }

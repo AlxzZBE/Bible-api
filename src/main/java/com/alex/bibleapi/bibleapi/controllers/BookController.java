@@ -29,6 +29,8 @@ public class BookController {
         return ResponseEntity.created(uri).build();
     }
 
+
+
     @GetMapping
     public List<BookGet> findAllBooks() {
         return bookService.findAll().stream().map(BookGet::new)
