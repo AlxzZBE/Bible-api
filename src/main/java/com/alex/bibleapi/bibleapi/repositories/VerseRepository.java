@@ -10,8 +10,8 @@ import java.util.Optional;
 @Repository
 public interface VerseRepository extends JpaRepository<Verse, Integer> {
 
-    Optional<Verse> findByVersionAndChapterAndNumberAndBook_id(String version, Integer chapter, Integer number,
-                                                               Integer bookId);
+    Optional<Verse> findByVersionAndBook_idAndChapterAndNumber(String version, Integer bookId, Integer chapter,
+                                                               Integer number);
 
     List<Verse> findByVersionAndBook_idAndChapter(String version, Integer bookId, Integer chapter);
 }

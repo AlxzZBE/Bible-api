@@ -51,32 +51,16 @@ public class ListVerseGet {
             return version;
         }
 
-        public void setVersion(String version) {
-            this.version = version;
-        }
-
         public Integer getChapter() {
             return chapter;
-        }
-
-        public void setChapter(Integer chapter) {
-            this.chapter = chapter;
         }
 
         public Integer getNumber() {
             return number;
         }
 
-        public void setNumber(Integer number) {
-            this.number = number;
-        }
-
         public String getText() {
             return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
         }
     }
 }

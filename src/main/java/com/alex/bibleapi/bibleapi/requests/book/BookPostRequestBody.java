@@ -11,13 +11,15 @@ public class BookPostRequestBody {
     private String author;
 
     @NotBlank(message = "The Field `name` cannot be Empty or Null")
+    @Length(min = 2, message = "The field `name` should be 2 min characters")
     private String name;
 
     @NotBlank(message = "The Field `abbrev` cannot be Empty or Null")
-    @Length(min = 2, max = 4, message = "The field `abbrev` should be 2 min characters and 4 max characters")
+    @Length(min = 2, max = 6, message = "The field `abbrev` should be 2 min characters and 6 max characters")
     private String abbrev;
 
     @NotBlank(message = "The Field `language` cannot be Empty or Null")
+    @Length(min = 2, max = 6, message = "The field `language` should be 2 min characters and 2 max characters")
     private String language;
 
     @NotNull(message = "The field `chapters` cannot be Null")
@@ -44,55 +46,27 @@ public class BookPostRequestBody {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getAbbrev() {
         return abbrev;
     }
 
-    public void setAbbrev(String abbrev) {
-        this.abbrev = abbrev;
-    }
-
     public String getLanguage() {
         return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
     }
 
     public Integer getChapters() {
         return chapters;
     }
 
-    public void setChapters(Integer chapters) {
-        this.chapters = chapters;
-    }
-
     public Integer getTestament() {
         return testament;
     }
 
-    public void setTestament(Integer testament) {
-        this.testament = testament;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

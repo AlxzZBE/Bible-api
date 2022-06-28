@@ -3,6 +3,7 @@ package com.alex.bibleapi.bibleapi.services;
 import com.alex.bibleapi.bibleapi.domain.Book;
 import com.alex.bibleapi.bibleapi.domain.Verse;
 import com.alex.bibleapi.bibleapi.exceptions.AlreadyExistsException;
+import com.alex.bibleapi.bibleapi.exceptions.NotFoundException;
 import com.alex.bibleapi.bibleapi.repositories.VerseRepository;
 import com.alex.bibleapi.bibleapi.requests.verse.VersePostRequestBody;
 import com.alex.bibleapi.bibleapi.temp.ArrayVersePostRequestBody;
@@ -22,11 +23,11 @@ public class VerseService {
         this.bookService = bookService;
     }
 
-    public void save(String abbrev, VersePostRequestBody form) {
+    public void saveOneVerse(String abbrev, VersePostRequestBody form) {
         Book book = bookService.findByAbbrevOrThrowNotFoundException(abbrev);
 
-        Optional<Verse> possibleVerse = verseRepository.findByVersionAndChapterAndNumberAndBook_id(
-                form.getVersion(), form.getChapter(), form.getNumber(), book.getId());
+        Optional<Verse> possibleVerse = verseRepository.findByVersionAndBook_idAndChapterAndNumber(
+                form.getVersion(), book.getId(), form.getChapter(), form.getNumber());
 
         if (possibleVerse.isEmpty()) {
             Verse newVerse = form.newVerse(form, book);
@@ -52,13 +53,15 @@ public class VerseService {
                             .formatted(book.getName(), form.getChapter(), form.getVersion()));
     }
 
-    public Optional<Verse> findByVersionAbbrevChapterNumber(String version, String abbrev, Integer chapter, Integer
-            number) {
+    public Verse findByVersionAbbrevChapterNumber(String version, String abbrev, Integer chapter, Integer number) {
         Book book = bookService.findByAbbrevOrThrowNotFoundException(abbrev);
-        return verseRepository.findByVersionAndChapterAndNumberAndBook_id(version, chapter, number, book.getId());
+        return verseRepository.findByVersionAndBook_idAndChapterAndNumber(version, book.getId(), chapter, number)
+                .orElseThrow(() -> new NotFoundException(
+                        "Not found Verse in the Book: `%s` Chapter: `%d` Number: `%d` Version: `%s`"
+                                .formatted(book.getName(), chapter, number, version)));
     }
 
-    public List<Verse> findByVersionAbbrevChapter(String version, String abbrev, Integer chapter) {
+    public List<Verse> findAllByVersionAbbrevChapter(String version, String abbrev, Integer chapter) {
         Book book = bookService.findByAbbrevOrThrowNotFoundException(abbrev);
         return verseRepository.findByVersionAndBook_idAndChapter(version, book.getId(), chapter);
     }

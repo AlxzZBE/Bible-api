@@ -31,12 +31,12 @@ public class Verse {
     @Column(unique = true, nullable = false)
     private String text;
 
-    public Book getBook() {
-        return book;
-    }
-
     public Integer getId() {
         return id;
+    }
+
+    public Book getBook() {
+        return book;
     }
 
     public void setBook(Book book) {

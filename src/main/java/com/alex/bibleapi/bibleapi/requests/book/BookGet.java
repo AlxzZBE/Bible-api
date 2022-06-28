@@ -33,55 +33,27 @@ public class BookGet {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getAbbrev() {
         return abbrev;
     }
 
-    public void setAbbrev(String abbrev) {
-        this.abbrev = abbrev;
-    }
-
     public String getLanguage() {
         return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
     }
 
     public Integer getChapters() {
         return chapters;
     }
 
-    public void setChapters(Integer chapters) {
-        this.chapters = chapters;
-    }
-
     public String getTestament() {
         return testament;
     }
 
-    public void setTestament(String testament) {
-        this.testament = testament;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }
