@@ -1,6 +1,4 @@
-package com.alex.bibleapi.bibleapi.verse;
-
-import com.alex.bibleapi.bibleapi.book.Book;
+package com.alex.bibleapi.bibleapi.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,6 +12,7 @@ public class Verse {
     private Integer id;
 
     @ManyToOne
+    @NotNull(message = "The field `book` cannot be null")
     private Book book;
 
     @NotBlank(message = "The Field `version` cannot be Empty or Null")

@@ -1,29 +1,23 @@
-package com.alex.bibleapi.bibleapi.book;
+package com.alex.bibleapi.bibleapi.requests.book;
 
-import javax.persistence.*;
+import com.alex.bibleapi.bibleapi.domain.Book;
+import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
 
-@Entity
-public class Book {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+public class BookPostRequestBody {
 
     private String author;
 
     @NotBlank(message = "The Field `name` cannot be Empty or Null")
-    @Column(unique = true, nullable = false)
     private String name;
 
     @NotBlank(message = "The Field `abbrev` cannot be Empty or Null")
-    @Column(unique = true, nullable = false)
+    @Length(min = 2, max = 2, message = "The field `abbrev` only should be 2 characters")
     private String abbrev;
 
     @NotBlank(message = "The Field `language` cannot be Empty or Null")
-    @Column(nullable = false)
     private String language;
 
     @NotNull(message = "The field `chapters` cannot be Null")
@@ -34,21 +28,16 @@ public class Book {
 
     private String description;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Book book = (Book) o;
-        return Objects.equals(id, book.id) && Objects.equals(author, book.author) && Objects.equals(name, book.name) && Objects.equals(abbrev, book.abbrev) && Objects.equals(language, book.language) && Objects.equals(chapters, book.chapters) && Objects.equals(testament, book.testament) && Objects.equals(description, book.description);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, author, name, abbrev, language, chapters, testament, description);
-    }
-
-    public Integer getId() {
-        return id;
+    public Book newBook(BookPostRequestBody form) {
+        Book newBook = new Book();
+        newBook.setAuthor(form.getAuthor());
+        newBook.setName(form.getName());
+        newBook.setAbbrev(form.getAbbrev());
+        newBook.setLanguage(form.getLanguage());
+        newBook.setChapters(form.getChapters());
+        newBook.setTestament(form.getTestament());
+        newBook.setDescription(form.getDescription());
+        return newBook;
     }
 
     public String getAuthor() {
@@ -105,5 +94,18 @@ public class Book {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "BookPostRequestBody{" +
+                "author='" + author + '\'' +
+                ", name='" + name + '\'' +
+                ", abbrev='" + abbrev + '\'' +
+                ", language='" + language + '\'' +
+                ", chapters=" + chapters +
+                ", testament=" + testament +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

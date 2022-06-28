@@ -1,5 +1,6 @@
-package com.alex.bibleapi.bibleapi.book;
+package com.alex.bibleapi.bibleapi.repositories;
 
+import com.alex.bibleapi.bibleapi.domain.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

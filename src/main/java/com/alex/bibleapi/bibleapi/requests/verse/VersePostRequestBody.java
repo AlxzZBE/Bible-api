@@ -1,6 +1,7 @@
-package com.alex.bibleapi.bibleapi.verse;
+package com.alex.bibleapi.bibleapi.requests.verse;
 
-import com.alex.bibleapi.bibleapi.book.Book;
+import com.alex.bibleapi.bibleapi.domain.Book;
+import com.alex.bibleapi.bibleapi.domain.Verse;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

@@ -1,9 +1,13 @@
-package com.alex.bibleapi.bibleapi.verse;
+package com.alex.bibleapi.bibleapi.services;
 
-import com.alex.bibleapi.bibleapi.book.Book;
-import com.alex.bibleapi.bibleapi.book.BookService;
+import com.alex.bibleapi.bibleapi.domain.Book;
+import com.alex.bibleapi.bibleapi.domain.Verse;
+import com.alex.bibleapi.bibleapi.repositories.VerseRepository;
+import com.alex.bibleapi.bibleapi.temp.ArrayVersePostRequestBody;
+import com.alex.bibleapi.bibleapi.requests.verse.VersePostRequestBody;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,5 +38,17 @@ public class VerseService {
             number) {
         Book book = bookService.findByAbbrev(abbrev);
         return verseRepository.findByVersionAndChapterAndNumberAndBook_id(version, chapter, number, book.getId());
+    }
+
+    public List<Verse> findByVersionAbbrevChapter(String version, String abbrev, Integer chapter) {
+        Book book = bookService.findByAbbrev(abbrev);
+        return verseRepository.findByVersionAndChapterAndBook_id(version, chapter, book.getId());
+    }
+
+    public List<Verse> saveVersesByChapter(String abbrev, ArrayVersePostRequestBody form) {
+        Book book = bookService.findByAbbrev(abbrev);
+        List<Verse> verses = form.newVerses(form, book);
+        verseRepository.saveAll(verses);
+        return verseRepository.findAll();
     }
 }
