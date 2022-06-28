@@ -1,5 +1,6 @@
 package com.alex.bibleapi.bibleapi.controllers;
 
+import com.alex.bibleapi.bibleapi.domain.Book;
 import com.alex.bibleapi.bibleapi.requests.book.BookGet;
 import com.alex.bibleapi.bibleapi.requests.book.BookPostRequestBody;
 import com.alex.bibleapi.bibleapi.services.BookService;
@@ -29,11 +30,15 @@ public class BookController {
         return ResponseEntity.created(uri).build();
     }
 
-
-
     @GetMapping
-    public List<BookGet> findAllBooks() {
-        return bookService.findAll().stream().map(BookGet::new)
-                .toList();
+    public ResponseEntity<BookGet> findByAbbrev(@RequestParam String abbrev) {
+        Book savedBook = bookService.findByAbbrevOrThrowNotFoundException(abbrev);
+        return ResponseEntity.ok(new BookGet(savedBook));
     }
+
+//    @GetMapping
+//    public List<BookGet> findAllBooks() {
+//        return bookService.findAll().stream().map(BookGet::new)
+//                .toList();
+//    }
 }
