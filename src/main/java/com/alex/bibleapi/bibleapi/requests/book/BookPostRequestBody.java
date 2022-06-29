@@ -30,6 +30,19 @@ public class BookPostRequestBody {
 
     private String description;
 
+    public BookPostRequestBody() {
+    }
+
+    public BookPostRequestBody(String author, String name, String abbrev, String language, Integer chapters, Integer testament, String description) {
+        this.author = author;
+        this.name = name;
+        this.abbrev = abbrev;
+        this.language = language;
+        this.chapters = chapters;
+        this.testament = testament;
+        this.description = description;
+    }
+
     public Book newBook(BookPostRequestBody form) {
         Book newBook = new Book();
         newBook.setAuthor(form.getAuthor());

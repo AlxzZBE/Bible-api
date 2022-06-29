@@ -37,7 +37,8 @@ public class BookController {
     }
 
     @GetMapping(params = "language")
-    public List<BookGet> findAllByLanguage(@RequestParam String language) {
-        return bookService.findAllByLanguage(language).stream().map(BookGet::new).toList();
+    public ResponseEntity<List<BookGet>> findAllByLanguage(@RequestParam String language) {
+        List<BookGet> bookGetList = bookService.findAllByLanguage(language).stream().map(BookGet::new).toList();
+        return ResponseEntity.ok(bookGetList);
     }
 }

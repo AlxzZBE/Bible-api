@@ -37,6 +37,20 @@ public class Book {
 
     private String description;
 
+    public Book() {
+    }
+
+    public Book(Integer id, String author, String name, String abbrev, String language, Integer chapters, Integer testament, String description) {
+        this.id = id;
+        this.author = author;
+        this.name = name;
+        this.abbrev = abbrev;
+        this.language = language;
+        this.chapters = chapters;
+        this.testament = testament;
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
