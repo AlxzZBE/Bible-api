@@ -1,6 +1,7 @@
 package com.alex.bibleapi.bibleapi.controllers;
 
 import com.alex.bibleapi.bibleapi.exceptions.AlreadyExistsException;
+import com.alex.bibleapi.bibleapi.exceptions.NotFoundException;
 import com.alex.bibleapi.bibleapi.requests.book.BookGet;
 import com.alex.bibleapi.bibleapi.requests.book.BookPostRequestBody;
 import com.alex.bibleapi.bibleapi.services.BookService;
@@ -78,13 +79,12 @@ class BookControllerTest {
         Assertions.assertThatExceptionOfType(AlreadyExistsException.class)
                 .isThrownBy(() -> bookController.saveOneBook(bookPostRequestBody))
                 .withMessageContainingAll("Already Exists a Book with Abbrev: `%s`".formatted(bookPostRequestBody.getAbbrev()));
-        Mockito.verify(bookService, Mockito.times(1)).save(bookPostRequestBody);
     }
 
     @Test
     @DisplayName("findByAbbrev Returns a BookGet When Successful")
     void findByAbbrev_ReturnsBookGet_WhenSuccessful() {
-        ResponseEntity<BookGet> response = bookController.findByAbbrev("gn");
+        ResponseEntity<BookGet> response = bookController.findByAbbrev(EXPECTED_ABBREV);
 
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Assertions.assertThat(response.getBody()).isNotNull().isExactlyInstanceOf(BookGet.class);
@@ -95,6 +95,17 @@ class BookControllerTest {
         Assertions.assertThat(response.getBody().getLanguage()).isEqualTo(EXPECTED_LANGUAGE);
         Assertions.assertThat(response.getBody().getTestament()).isEqualTo(EXPECTED_TESTAMENT);
         Assertions.assertThat(response.getBody().getDescription()).isEqualTo(EXPECTED_DESCRIPTION);
+    }
+
+    @Test
+    @DisplayName("findByAbbrev Throws NotFoundException When Book With Abbrev Is Not Found")
+    void findByAbbrev_ThrowsNotFoundException_WhenBookWithAbbrevIsNotFound() {
+        BDDMockito.when(bookService.findByAbbrevOrThrowNotFoundException(EXPECTED_ABBREV))
+                .thenThrow(new NotFoundException("The Book with `abbrev` = `%s` Not Found".formatted(EXPECTED_ABBREV)));
+
+        Assertions.assertThatExceptionOfType(NotFoundException.class)
+                .isThrownBy(() -> bookController.findByAbbrev(EXPECTED_ABBREV))
+                .withMessageContainingAll("The Book with `abbrev` = `%s` Not Found".formatted(EXPECTED_ABBREV));
     }
 
     @Test
