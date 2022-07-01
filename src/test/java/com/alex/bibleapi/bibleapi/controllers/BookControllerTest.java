@@ -20,6 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.Collections;
 import java.util.List;
 
 @ExtendWith(SpringExtension.class)
@@ -123,5 +124,17 @@ class BookControllerTest {
         Assertions.assertThat(response.getBody().get(0).getLanguage()).isEqualTo(EXPECTED_LANGUAGE);
         Assertions.assertThat(response.getBody().get(0).getTestament()).isEqualTo(EXPECTED_TESTAMENT);
         Assertions.assertThat(response.getBody().get(0).getDescription()).isEqualTo(EXPECTED_DESCRIPTION);
+    }
+
+    @Test
+    @DisplayName("findAllByLanguage Returns A Empty List When Books With Language is Not Found")
+    void findAllByLanguage_ReturnsAEmptyList_WhenBooksWithLanguageIsNotFound() {
+        BDDMockito.when(bookService.findAllByLanguage(EXPECTED_LANGUAGE))
+                .thenReturn(Collections.emptyList());
+
+        ResponseEntity<List<BookGet>> response = bookController.findAllByLanguage("pt");
+
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(response.getBody()).isNotNull().isEmpty();
     }
 }
