@@ -1,5 +1,6 @@
 package com.alex.bibleapi.bibleapi.controllers;
 
+import com.alex.bibleapi.bibleapi.exceptions.AlreadyExistsException;
 import com.alex.bibleapi.bibleapi.requests.book.BookGet;
 import com.alex.bibleapi.bibleapi.requests.book.BookPostRequestBody;
 import com.alex.bibleapi.bibleapi.services.BookService;
@@ -54,7 +55,7 @@ class BookControllerTest {
     }
 
     @Test
-    @DisplayName("save Returns Void When Successful")
+    @DisplayName("saveOneBook Returns Void When Successful")
     void saveOneBook_ReturnsVoid_WhenSuccessful() {
         BookPostRequestBody bookPostRequestBody = BookPostRequestBodyCreator.createUserPostRequestBody();
         ResponseEntity<Void> response = bookController.saveOneBook(bookPostRequestBody);
@@ -63,6 +64,20 @@ class BookControllerTest {
         Assertions.assertThat(response.getBody()).isNull();
         Assertions.assertThat(response.getHeaders().getLocation().getQuery())
                 .isEqualTo("abbrev=" + EXPECTED_ABBREV);
+        Mockito.verify(bookService, Mockito.times(1)).save(bookPostRequestBody);
+    }
+
+    @Test
+    @DisplayName("saveOneBook Throws AlreadyExistsException When Already Exists A Book With The Same Abbrev")
+    void saveOneBook_ThrowsAlreadyExistsException_WhenAlreadyExistsABookWithTheSameAbbrev() {
+        BookPostRequestBody bookPostRequestBody = BookPostRequestBodyCreator.createUserPostRequestBody();
+
+        BDDMockito.doThrow(new AlreadyExistsException("Already Exists a Book with Abbrev: `%s`".formatted(bookPostRequestBody.getAbbrev())))
+                .when(bookService).save(ArgumentMatchers.any(BookPostRequestBody.class));
+
+        Assertions.assertThatExceptionOfType(AlreadyExistsException.class)
+                .isThrownBy(() -> bookController.saveOneBook(bookPostRequestBody))
+                .withMessageContainingAll("Already Exists a Book with Abbrev: `%s`".formatted(bookPostRequestBody.getAbbrev()));
         Mockito.verify(bookService, Mockito.times(1)).save(bookPostRequestBody);
     }
 
